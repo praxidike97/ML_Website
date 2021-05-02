@@ -43,12 +43,26 @@
           </div>
 
           <div class="col-md-6 align-self-center">
+              <form method="POST" action="./vae">
+                  <input class="mdl-slider mdl-js-slider" type="range" min="-2" max="2" value="{{ latent_dim01 }}" tabindex="0" step="0.1" name="latent_dim01">
 
-                <input class="mdl-slider mdl-js-slider" type="range" min="-2" max="2" value="0" tabindex="0" step="0.1">
-                <br>
-                <br>
-                <input class="mdl-slider mdl-js-slider" type="range" min="-2" max="2" value="0" tabindex="0" step="0.1">
+                  <br>
+                  <br>
 
+                  <input class="mdl-slider mdl-js-slider" type="range" min="-2" max="2" value="{{ latent_dim02 }}" tabindex="0" step="0.1" name="latent_dim02">
+
+                  <br>
+                  <br>
+
+                  <div class="text-center">
+                   <a href="./vae">
+                    <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                        Generate image
+                    </button>
+                   </a>
+                  </div>
+
+              </form>
           </div>
 
           </div>
