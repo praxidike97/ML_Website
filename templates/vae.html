@@ -1,75 +1,59 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Flask Tutorial</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <!-- See here for colors: https://getmdl.io/customize/index.html-->
-    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.deep_purple-purple.min.css">
-    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-  </head>
-  <body>
+{% extends 'base.html' %}
 
-    <!-- Always shows a header, even in smaller screens. -->
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-      <header class="mdl-layout__header">
-        <div class="mdl-layout__header-row">
-          <!-- Title -->
-          <span class="mdl-layout-title">Fabian Stern</span>
-          <!-- Add spacer, to align navigation to the right -->
-          <div class="mdl-layout-spacer"></div>
-          <!-- Navigation. We hide it in small screens. -->
-          <nav class="mdl-navigation mdl-layout--large-screen-only">
-            <a class="mdl-navigation__link" href="">Link</a>
-            <a class="mdl-navigation__link" href="">Link</a>
-            <a class="mdl-navigation__link" href="">Link</a>
-            <a class="mdl-navigation__link" href="">Link</a>
-          </nav>
+{% block header %}
+<h1 xmlns="http://www.w3.org/1999/html">{% block title %}Variational autoencoder (VAE){% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+      <script type=text/javascript>
+
+          $(document).ready(function() {
+
+            $("#btnGenerateDigit").click(function(){
+              var slider = document.getElementById("digitSlider01");
+              console.log(slider.value);
+              $.ajax({
+                type : 'POST',
+                "Content-Type":"application/json",
+                url : "{{url_for('vae_get_image')}}",
+                data: { latent_dim01: document.getElementById("digitSlider01").value, latent_dim02: document.getElementById("digitSlider02").value },
+                success: function(data) {
+                    console.log(data);
+                    document.getElementById("imgDigit").src = data['image'];
+                }
+              });
+            });
+          });
+    </script>
+
+    <div class="row">
+
+        <div class="col-md-6 align-self-center">
+        <img id="imgDigit" src="{{ image }}"/>
         </div>
-      </header>
 
-      <main class="mdl-layout__content">
-        <div class="page-content">
+        <div class="col-md-6 align-self-center">
+            <form method="post">
+              <input id="digitSlider01" class="mdl-slider mdl-js-slider" type="range" min="-2" max="2" value="{{ latent_dim01 }}" tabindex="0" step="0.1" name="latent_dim01">
 
-          <div class="m-5">
-            <h2> Variational autoencoder (VAE) </h2>
-          </div>
+              <br>
+              <br>
 
-          <div class="row">
+              <input id="digitSlider02" class="mdl-slider mdl-js-slider" type="range" min="-2" max="2" value="{{ latent_dim02 }}" tabindex="0" step="0.1" name="latent_dim02">
 
-          <div class="col-md-6 align-self-center">
-            <img src="{{ image }}"/>
-          </div>
+              <br>
+              <br>
 
-          <div class="col-md-6 align-self-center">
-              <form method="POST" action="./vae">
-                  <input class="mdl-slider mdl-js-slider" type="range" min="-2" max="2" value="{{ latent_dim01 }}" tabindex="0" step="0.1" name="latent_dim01">
-
-                  <br>
-                  <br>
-
-                  <input class="mdl-slider mdl-js-slider" type="range" min="-2" max="2" value="{{ latent_dim02 }}" tabindex="0" step="0.1" name="latent_dim02">
-
-                  <br>
-                  <br>
-
-                  <div class="text-center">
-                   <a href="./vae">
-                    <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
-                        Generate image
-                    </button>
-                   </a>
-                  </div>
-
-              </form>
-          </div>
-
-          </div>
-
+              <div class="text-center">
+                <button id="btnGenerateDigit" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                    Generate image
+                </button>
+              </div>
+            </form>
         </div>
-      </main>
+
     </div>
 
-  </body>
-</html>
+{% endblock %}
